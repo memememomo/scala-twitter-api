@@ -23,8 +23,11 @@ object  TwitterApi
     timeLine.getHomeTimeline(new Paging(1, 200))
   }
 
+  def searchTweet(keyword: String): List[Status] = {
+    getTweet.filter(s => s.getText.contains(keyword)).toList
+  }
+
   def main(args: Array[String]) = {
-    val tweets = getTweet
-    tweets.foreach(s => println(s.getText))
+    searchTweet("猫").foreach(s => println(s.getText))
   }
 }
