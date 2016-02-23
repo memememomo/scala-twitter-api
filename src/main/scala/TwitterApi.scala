@@ -5,7 +5,7 @@ import com.typesafe.config.ConfigFactory
 
 object  TwitterApi
 {
-  def buildConfig = {
+  def config = {
     val config = ConfigFactory.load()
     val cb = new ConfigurationBuilder
     cb.setOAuthConsumerKey(config.getString("consumerKey"))
@@ -15,19 +15,15 @@ object  TwitterApi
     cb.build
   }
 
-  def getTweet: ResponseList[Status] = {
-    val twitterFactory = new TwitterFactory(buildConfig)
-    val tt = twitterFactory.getInstance
+  def twitter = new TwitterFactory(config).getInstance
 
-    val timeLine = tt.timelines
-    timeLine.getHomeTimeline(new Paging(1, 200))
-  }
-
-  def searchTweet(keyword: String): List[Status] = {
-    getTweet.filter(s => s.getText.contains(keyword)).toList
-  }
+  def timeline = twitter.timelines
 
   def main(args: Array[String]) = {
-    searchTweet("猫").foreach(s => println(s.getText))
+    val keyword = "猫"
+    val result = timeline
+      .getHomeTimeline(new Paging(1, 200))
+      .filter(s => s.getText.contains(keyword))
+    result.map(_.getText).foreach(println(_))
   }
 }
