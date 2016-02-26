@@ -5,3 +5,4 @@ project/boot/
 .history
 .cache
 src/main/resources/application.conf
+.idea/
