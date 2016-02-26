@@ -24,10 +24,4 @@ object  TwitterApi
       .getHomeTimeline(new Paging(1, 200))
       .filter(s => s.getText.contains(keyword))
   }
-
-  def main(args: Array[String]) = {
-    val keyword = "猫"
-    val result = searchHomeTimeLine(keyword)
-    result.map(_.getText).foreach(println(_))
-  }
 }

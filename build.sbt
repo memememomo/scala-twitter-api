@@ -8,7 +8,10 @@ scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
   "org.twitter4j" % "twitter4j-core" % "4.0.2",
-  "com.typesafe" % "config" % "1.3.0"
+  "com.typesafe" % "config" % "1.3.0",
+  "com.github.scopt" %% "scopt" % "3.4.0"
 )
+
+resolvers += Resolver.sonatypeRepo("public")
 
 assemblySettings
