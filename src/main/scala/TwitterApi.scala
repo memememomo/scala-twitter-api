@@ -24,4 +24,10 @@ object  TwitterApi
       .getHomeTimeline(new Paging(1, 200))
       .filter(s => s.getText.contains(keyword))
   }
+
+  def streaming(listener: StatusListener) = {
+    val twitterStream = new TwitterStreamFactory(config).getInstance
+    twitterStream.addListener(listener)
+    twitterStream
+  }
 }

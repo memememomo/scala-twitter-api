@@ -1,4 +1,4 @@
-
+import  twitter4j._
 
 object Main {
   case class Config(command: String = "", keyword: String = "")
@@ -13,6 +13,9 @@ object Main {
           c.copy(keyword = x)
         } text "keyword for search"
         )
+      cmd("stream") action { (_, c) =>
+        c.copy(command = "stream")
+      } text "stream is a command"
     }
 
     parser.parse(args, Config()) match {
@@ -21,6 +24,27 @@ object Main {
           case "search" =>
             val result = TwitterApi.searchHomeTimeLine(config.keyword)
             result.map(_.getText).foreach(println(_))
+          case "stream" =>
+            var stream = TwitterApi.streaming(new StatusListener {
+              override def onStallWarning(warning: StallWarning): Unit = {
+              }
+
+              override def onDeletionNotice(statusDeletionNotice: StatusDeletionNotice): Unit = {
+              }
+
+              override def onScrubGeo(userId: Long, upToStatusId: Long): Unit = {
+              }
+
+              override def onStatus(status: Status): Unit = {
+              }
+
+              override def onTrackLimitationNotice(numberOfLimitedStatuses: Int): Unit = {
+              }
+
+              override def onException(ex: Exception): Unit = {
+              }
+            })
+            stream.user()
           case _ => parser.showUsage()
         }
       case None =>
