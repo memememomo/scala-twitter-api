@@ -25,6 +25,11 @@ object  TwitterApi
       .filter(s => s.getText.contains(keyword))
   }
 
+  def sendDirectMessage(text: String) = {
+    val config = ConfigFactory.load()
+    twitter.sendDirectMessage(config.getString("toDirectMessage"), text)
+  }
+
   def streaming(listener: StatusListener) = {
     val twitterStream = new TwitterStreamFactory(config).getInstance
     twitterStream.addListener(listener)

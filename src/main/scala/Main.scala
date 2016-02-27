@@ -23,7 +23,10 @@ object Main {
         config.command match {
           case "search" =>
             val result = TwitterApi.searchHomeTimeLine(config.keyword)
-            result.map(_.getText).foreach(println(_))
+            println("Hit: " + result.length)
+            result.foreach(t => {
+              TwitterApi.sendDirectMessage(t.getId + ":" + t.getText)
+            })
           case "stream" =>
             var stream = TwitterApi.streaming(new StatusListener {
               override def onStallWarning(warning: StallWarning): Unit = {

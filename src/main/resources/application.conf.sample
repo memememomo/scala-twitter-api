@@ -1,5 +1,6 @@
-userName=""
 consumerKey=""
 consumerSecret=""
 accessToken=""
 accessTokenSecret=""
+userName=""
+toDirectMessage=""
