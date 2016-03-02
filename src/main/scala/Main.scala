@@ -1,4 +1,5 @@
 import  twitter4j._
+import org.joda.time.DateTime
 
 object Main {
   case class Config(command: String = "", keyword: String = "")
@@ -35,11 +36,17 @@ object Main {
               TwitterApi.sendDirectMessage(t.getId + ":" + t.getText)
             })
           case "ranking" =>
+            val since = new DateTime(2016, 2, 24, 0, 0)
             TwitterApi
-              .search("2016-03-01", config.keyword)
+              .search(since, config.keyword)
               .sortWith(_.getFavoriteCount > _.getFavoriteCount)
               .filter(!_.isRetweet)
-              .foreach(s => println(s.getFavoriteCount + ":" + s.getText))
+              .zipWithIndex
+              .foreach{v =>
+                val s = v._1
+                val i = v._2
+                println((i+1) + ":" + s.getFavoriteCount + ":" + s.getUser.getName + ":" + s.getText)
+              }
           case "stream" =>
             var stream = TwitterApi.streaming(new StatusListener {
               override def onStallWarning(warning: StallWarning): Unit = {

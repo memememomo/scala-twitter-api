@@ -1,7 +1,9 @@
+import org.joda.time.format.DateTimeFormat
 import twitter4j._
 import twitter4j.conf._
 import scala.collection.JavaConversions._
 import com.typesafe.config.ConfigFactory
+import org.joda.time.DateTime
 
 object  TwitterApi
 {
@@ -19,9 +21,11 @@ object  TwitterApi
 
   def timeline = twitter.timelines
 
-  def search(since: String, keyword: String): List[Status] = {
+  def search(since: DateTime, keyword: String): List[Status] = {
+    val fmt = DateTimeFormat.forPattern("yyyy-MM-dd")
     val query = new Query()
-    query.setSince(since)
+    query.setSince(fmt.print(since))
+    query.setUntil(fmt.print(since.plusDays(1)))
     query.setQuery(keyword)
     query.setCount(1500)
     search(query)
