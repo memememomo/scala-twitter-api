@@ -19,6 +19,23 @@ object  TwitterApi
 
   def timeline = twitter.timelines
 
+  def search(since: String, keyword: String): List[Status] = {
+    val query = new Query()
+    query.setSince(since)
+    query.setQuery(keyword)
+    query.setCount(1500)
+    search(query)
+  }
+
+  def search(query: Query): List[Status] = {
+    val result = twitter.search(query)
+    if (result.hasNext) {
+      result.getTweets.toList ++ search(result.nextQuery())
+    } else {
+      result.getTweets.toList
+    }
+  }
+
   def searchHomeTimeLine(keyword: String) = {
     timeline
       .getHomeTimeline(new Paging(1, 200))

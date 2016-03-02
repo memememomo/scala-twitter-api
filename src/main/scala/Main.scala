@@ -13,6 +13,13 @@ object Main {
           c.copy(keyword = x)
         } text "keyword for search"
         )
+      cmd("ranking") action { (_, c) =>
+        c.copy(command = "ranking")
+      } text "ranking is a command" children (
+        arg[String]("keyword") action { (x, c) =>
+          c.copy(keyword = x)
+        } text "keyword for search"
+        )
       cmd("stream") action { (_, c) =>
         c.copy(command = "stream")
       } text "stream is a command"
@@ -27,6 +34,12 @@ object Main {
             result.foreach(t => {
               TwitterApi.sendDirectMessage(t.getId + ":" + t.getText)
             })
+          case "ranking" =>
+            TwitterApi
+              .search("2016-03-01", config.keyword)
+              .sortWith(_.getFavoriteCount > _.getFavoriteCount)
+              .filter(!_.isRetweet)
+              .foreach(s => println(s.getFavoriteCount + ":" + s.getText))
           case "stream" =>
             var stream = TwitterApi.streaming(new StatusListener {
               override def onStallWarning(warning: StallWarning): Unit = {
